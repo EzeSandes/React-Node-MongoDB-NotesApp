@@ -1,84 +1,56 @@
 const Note = require('../models/noteModel');
+const catchAsync = require('../utils/catchAsync');
 
-exports.getAllNotes = async (req, res) => {
-  try {
-    const notes = await Note.find();
+exports.getAllNotes = catchAsync(async (req, res, next) => {
+  const notes = await Note.find();
 
-    res.status(200).json({
-      status: 'success',
-      data: { notes },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: 'success',
+    data: { notes },
+  });
+});
 
-exports.getNote = async (req, res) => {
-  try {
-    const note = await Note.findById(req.params.id);
+exports.getNote = catchAsync(async (req, res, next) => {
+  const note = await Note.findById(req.params.id);
 
-    res.status(200).json({
-      status: 'success',
-      data: { note },
-    });
-  } catch (error) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  if (!note) return next(new Error('No Note found with that ID'));
 
-exports.createNote = async (req, res) => {
-  try {
-    const newNote = await Note.create(req.body);
+  res.status(200).json({
+    status: 'success',
+    data: { note },
+  });
+});
 
-    res.status(201).json({
-      status: 'success',
-      data: { newNote },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'Invalid data sent!',
-    });
-  }
-};
+exports.createNote = catchAsync(async (req, res, next) => {
+  const newNote = await Note.create(req.body);
 
-exports.updateNote = async (req, res) => {
-  try {
-    const updatedNote = await Note.findByIdAndUpdate(req.params.is, req.body, {
-      new: true,
-      runValidators: true,
-    });
+  res.status(201).json({
+    status: 'success',
+    data: { newNote },
+  });
+});
 
-    res.status(201).json({
-      status: 'success',
-      data: { updatedNote },
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: 'Invalid data sent!',
-    });
-  }
-};
+exports.updateNote = catchAsync(async (req, res, next) => {
+  const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
-exports.deleteNote = async (req, res) => {
-  try {
-    await Note.findByIdAndDelete(req.params.id);
+  if (!updatedNote) return next(new Error('No Note found with that ID'));
 
-    res.status(204).json({
-      status: 'success',
-      data: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err,
-    });
-  }
-};
+  res.status(201).json({
+    status: 'success',
+    data: { updatedNote },
+  });
+});
+
+exports.deleteNote = catchAsync(async (req, res, next) => {
+  const note = await Note.findByIdAndDelete(req.params.id);
+
+  if (!note) return next(new Error('No Note found with that ID'));
+
+  res.status(204).json({
+    status: 'success',
+    data: null,
+  });
+});
