@@ -1,5 +1,6 @@
 const express = require('express');
 const noteRouter = require('./routes/noteRoutes');
+const globalErrorHandler = require('./controllers/errorController');
 const app = express();
 /*
  ****************************** MIDDLEWARES
@@ -24,17 +25,7 @@ app.use(
 
 app.use('/api/v1/notes', noteRouter);
 
-app.use('*', (req, res, next) => {
-  const err = new Error(`Can't find ${req.originalUrl} on the server`);
-  err.status = 'fail';
-  err.statusCode = 404;
-
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  });
-
-  // next();
-});
+// In case there is no route.
+app.use('*', globalErrorHandler);
 
 module.exports = app;

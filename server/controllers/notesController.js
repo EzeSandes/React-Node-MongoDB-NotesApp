@@ -1,5 +1,6 @@
 const Note = require('../models/noteModel');
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 
 exports.getAllNotes = catchAsync(async (req, res, next) => {
   const notes = await Note.find();
@@ -13,7 +14,7 @@ exports.getAllNotes = catchAsync(async (req, res, next) => {
 exports.getNote = catchAsync(async (req, res, next) => {
   const note = await Note.findById(req.params.id);
 
-  if (!note) return next(new Error('No Note found with that ID'));
+  if (!note) return next(new AppError('No Note found with that ID', 404));
 
   res.status(200).json({
     status: 'success',
@@ -36,7 +37,8 @@ exports.updateNote = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
-  if (!updatedNote) return next(new Error('No Note found with that ID'));
+  if (!updatedNote)
+    return next(new AppError('No Note found with that ID', 404));
 
   res.status(201).json({
     status: 'success',
@@ -47,7 +49,7 @@ exports.updateNote = catchAsync(async (req, res, next) => {
 exports.deleteNote = catchAsync(async (req, res, next) => {
   const note = await Note.findByIdAndDelete(req.params.id);
 
-  if (!note) return next(new Error('No Note found with that ID'));
+  if (!note) return next(new AppError('No Note found with that ID', 404));
 
   res.status(204).json({
     status: 'success',
