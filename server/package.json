@@ -4,13 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.10.0",
+    "validator": "^13.9.0"
   },
   "devDependencies": {
     "eslint": "^8.35.0",
@@ -22,5 +26,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "prettier": "^2.8.4"
+  },
+  "engines": {
+    "node": "^17"
   }
 }
