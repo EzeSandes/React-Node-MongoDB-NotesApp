@@ -24,4 +24,17 @@ app.use(
 
 app.use('/api/v1/notes', noteRouter);
 
+app.use('*', (req, res, next) => {
+  const err = new Error(`Can't find ${req.originalUrl} on the server`);
+  err.status = 'fail';
+  err.statusCode = 404;
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+
+  // next();
+});
+
 module.exports = app;
