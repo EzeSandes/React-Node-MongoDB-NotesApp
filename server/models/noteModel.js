@@ -23,6 +23,7 @@ const noteScheema = new mongoose.Schema(
     createdAt: {
       type: Date,
       default: Date.now(),
+      immutable: true,
     },
     lastEdit: {
       type: Date,

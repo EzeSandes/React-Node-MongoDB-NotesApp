@@ -32,6 +32,9 @@ exports.createNote = catchAsync(async (req, res, next) => {
 });
 
 exports.updateNote = catchAsync(async (req, res, next) => {
+  // Time of last edition updated.
+  req.body.lastEdit = Date.now();
+
   const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
