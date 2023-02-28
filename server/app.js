@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParcer = require('cookie-parser');
 const noteRouter = require('./routes/noteRoutes');
 const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
@@ -6,6 +7,8 @@ const app = express();
 /*
  ****************************** MIDDLEWARES
  */
+
+app.use(cookieParcer());
 
 app.use(
   express.json({
