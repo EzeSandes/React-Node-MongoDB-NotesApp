@@ -29,11 +29,11 @@ const noteScheema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
-    // user: {
-    //   type: mongoose.Types.ObjectId,
-    //   ref: 'User',
-    //   required: [true, 'Note must belong to a user'],
-    // },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Note must belong to a user'],
+    },
   },
   {
     toObject: { virtuals: true },

@@ -1,5 +1,6 @@
 const express = require('express');
 const noteRouter = require('./routes/noteRoutes');
+const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
 /*
@@ -24,6 +25,7 @@ app.use(
  */
 
 app.use('/api/v1/notes', noteRouter);
+app.use('/api/v1/users', userRouter);
 
 // In case there is no route.
 app.use('*', globalErrorHandler);
