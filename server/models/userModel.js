@@ -70,6 +70,8 @@ userSchema.pre(/^save/, async function (next) {
 
   // I only need this field for the user to confirm their password, not for the DB
   this.passwordConfirm = undefined;
+
+  next();
 });
 
 /*
