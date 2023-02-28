@@ -3,49 +3,55 @@ const validator = require('validator');
 
 const MIN_LENGTH_PASSWORD = 8;
 
-const userSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: [true, 'A user must have a name.'],
-  },
-  email: {
-    type: String,
-    required: [true, 'Please provide an email.'],
-    unique: true,
-    lowercase: true,
-    validate: {
-      validator: validator.isEmail,
-      message: 'Email validation failed.',
+const userSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: [true, 'A user must have a name.'],
     },
-  },
-  role: {
-    type: String,
-    enum: ['admin', 'user'],
-    default: 'user',
-  },
-  password: {
-    type: String,
-    required: [true, 'A user must have a password'],
-    minLength: MIN_LENGTH_PASSWORD,
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      validator: function (el) {
-        return el === this.password;
+    email: {
+      type: String,
+      required: [true, 'Please provide an email.'],
+      unique: true,
+      lowercase: true,
+      validate: {
+        validator: validator.isEmail,
+        message: 'Email validation failed.',
       },
-      message: 'Password are not the same',
     },
-    select: false,
+    role: {
+      type: String,
+      enum: ['admin', 'user'],
+      default: 'user',
+    },
+    password: {
+      type: String,
+      required: [true, 'A user must have a password'],
+      minLength: MIN_LENGTH_PASSWORD,
+      select: false,
+    },
+    passwordConfirm: {
+      type: String,
+      required: [true, 'Please confirm your password'],
+      validate: {
+        validator: function (el) {
+          return el === this.password;
+        },
+        message: 'Password are not the same',
+      },
+      select: false,
+    },
+    active: {
+      type: Boolean,
+      default: true,
+      select: false,
+    },
   },
-  active: {
-    type: Boolean,
-    default: true,
-    select: false,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 /*
  *************************** QUERY MIDDLEWARES
@@ -59,6 +65,12 @@ userSchema.pre(/^find/, function (next) {
 /*
  ***************************
  */
+// Docum: https://mongoosejs.com/docs/populate.html#populate-virtuals
+userSchema.virtual('notes', {
+  ref: 'Note',
+  foreignField: 'user',
+  localField: '_id',
+});
 
 const User = mongoose.model('User', userSchema);
 
