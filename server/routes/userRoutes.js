@@ -9,7 +9,7 @@ router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
 ////////////// ONLY ADMIN ACCESS
-router.use(authController.protect);
+router.use(authController.protect, authController.restrictTo('admin'));
 
 router
   .route('/')
