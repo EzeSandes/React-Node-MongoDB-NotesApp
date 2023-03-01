@@ -8,7 +8,7 @@ router.post('/signup', authController.singup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
-//////////////
+////////////// ONLY ADMIN ACCESS
 router.use(authController.protect);
 
 router
