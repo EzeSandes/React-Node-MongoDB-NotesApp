@@ -121,3 +121,29 @@ exports.restrictTo =
 
     next();
   };
+
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const currUser = await User.findById(decoded.id).populate('notes');
+
+    console.log(currUser);
+
+    if (!currUser) return next(new AppError('User not found', 404));
+
+    currUser.role = undefined;
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        user: currUser,
+      },
+    });
+  }
+
+  return next(new AppError('User not logged in', 401));
+});
