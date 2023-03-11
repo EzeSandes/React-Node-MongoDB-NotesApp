@@ -25,6 +25,7 @@ const createSendToken = (user, statusCode, req, res) => {
   res.cookie('jwt', token, cookieOptions);
 
   user.password = undefined;
+  // user.role = undefined;
 
   res.status(statusCode).json({
     status: 'success',
@@ -55,7 +56,9 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Please provide an email or password', 400));
 
   // 2) Check if user exists and the password is correct.
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email })
+    .select('+password')
+    .populate('notes');
 
   if (!user || !(await user.correctPassword(password, user.password)))
     return next(new AppError('Incorrect password or email', 401));
@@ -130,8 +133,6 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     );
 
     const currUser = await User.findById(decoded.id).populate('notes');
-
-    console.log(currUser);
 
     if (!currUser) return next(new AppError('User not found', 404));
 

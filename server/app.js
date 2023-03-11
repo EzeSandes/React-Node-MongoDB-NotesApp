@@ -1,12 +1,21 @@
 const express = require('express');
 const cookieParcer = require('cookie-parser');
+const cors = require('cors');
 const noteRouter = require('./routes/noteRoutes');
 const userRouter = require('./routes/userRoutes');
 const globalErrorHandler = require('./controllers/errorController');
 const app = express();
+
 /*
  ****************************** MIDDLEWARES
  */
+
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(cookieParcer());
 

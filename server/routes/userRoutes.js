@@ -8,6 +8,8 @@ router.post('/signup', authController.singup);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
+router.get('/notes', authController.isLoggedIn);
+
 router.use(authController.protect);
 
 ////////////// ONLY ADMIN ACCESS
