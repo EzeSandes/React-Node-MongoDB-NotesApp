@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.errMsg {
+  font-size: 1.3rem;
+  color: #dc2626;
+  text-align: center;
+}
+
+.offscreen {
+  position: absolute;
+  left: 9999;
+}
+
+.hide {
+  display: none;
+}
+
+.invalid-data {
+  border: 2px solid #dc2626;
+}
