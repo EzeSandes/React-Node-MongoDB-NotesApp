@@ -54,6 +54,8 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  document.body.classList.add('bg-stone-900');
+
   return <RouterProvider router={router} />;
 }
 
